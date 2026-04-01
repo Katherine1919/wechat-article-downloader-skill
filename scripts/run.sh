@@ -25,6 +25,7 @@ Optional env:
   TOPIC_REGEX
   DOWNLOAD_RETRIES (default: 1)
   MAX_DOWNLOAD (default: 0, all)
+  LOCAL_MD_PATH (optional: export downloaded markdown to local/workspace)
 EOF
 }
 
@@ -119,5 +120,14 @@ python3 "$SCRIPT_DIR/download_articles.py" \
 python3 "$SCRIPT_DIR/classify_titles.py" \
   --metadata "$ACCOUNT_DIR/articles-all-metadata.json" \
   --output "$ACCOUNT_DIR/title-classification.md"
+
+if [[ -n "${LOCAL_MD_PATH:-}" ]]; then
+  account_name="$(basename "$ACCOUNT_DIR")"
+  python3 "$SCRIPT_DIR/export_markdown.py" \
+    --source "$OUT_DIR" \
+    --target "$LOCAL_MD_PATH" \
+    --account "$account_name" \
+    --mode "$MODE"
+fi
 
 echo "done=$ACCOUNT_DIR"

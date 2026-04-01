@@ -6,13 +6,17 @@ import re
 from pathlib import Path
 from urllib.parse import quote
 from urllib.request import Request, urlopen
+from urllib.error import URLError
 
 
 def request_json(base: str, path: str, auth_key: str) -> dict:
     req = Request(f"{base}{path}")
     req.add_header("Cookie", f"auth-key={auth_key}")
-    with urlopen(req, timeout=30) as resp:
-        return json.loads(resp.read().decode("utf-8"))
+    try:
+        with urlopen(req, timeout=30) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+    except URLError as exc:
+        raise RuntimeError(f"Cannot reach exporter service at {base}. Start service first.") from exc
 
 
 def safe_dirname(name: str) -> str:

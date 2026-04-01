@@ -32,6 +32,7 @@ cp .env.example .env
 - `FILTER_MODE`（`all` 或 `topic`）
 - `TOPIC_REGEX`（topic 模式下关键词）
 - `MAX_DOWNLOAD`（限量下载，默认 `0` 表示全部）
+- `LOCAL_MD_PATH`（可选：把 Markdown 额外导出到本地目录或龙虾 workspace）
 
 ## 使用方法
 下载全部文章：
@@ -49,6 +50,12 @@ cp .env.example .env
 MAX_DOWNLOAD=5 ./scripts/run.sh --account "苍何" --mode topic
 ```
 
+导出到龙虾 workspace（示例）：
+```bash
+LOCAL_MD_PATH="/Users/KKClaw/.openclaw/agents/KK公众号主笔/workspace/inbox_md" \
+./scripts/run.sh --account "苍何" --mode all
+```
+
 ## 输出目录结构
 `$VAULT_PATH/$OUTPUT_SUBDIR/<account>/`
 
@@ -60,6 +67,10 @@ MAX_DOWNLOAD=5 ./scripts/run.sh --account "苍何" --mode topic
 若 `mode=topic`，还会额外生成：
 - `urls_topic.txt`
 - `raw_exports_topic/`
+
+若设置了 `LOCAL_MD_PATH`，还会额外导出：
+- `$LOCAL_MD_PATH/<account>/<mode>/*.md`
+- `$LOCAL_MD_PATH/<account>/<mode>/export-summary.json`
 
 ## 本地验证
 ```bash
@@ -112,6 +123,12 @@ Topic-only mode:
 Production smoke test:
 ```bash
 MAX_DOWNLOAD=5 ./scripts/run.sh --account "Canghe" --mode topic
+```
+
+Export markdown to a local/workspace path:
+```bash
+LOCAL_MD_PATH="/Users/KKClaw/.openclaw/agents/KK公众号主笔/workspace/inbox_md" \
+./scripts/run.sh --account "Canghe" --mode all
 ```
 
 ### Verification

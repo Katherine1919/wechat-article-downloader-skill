@@ -13,6 +13,7 @@ Use this skill when user asks to download articles from a WeChat public account 
 - Downloads article content and images via `opencli weixin download`
 - Writes metadata and URL list files
 - Generates title-based classification markdown
+- Optionally exports markdown files to local path or Lobster workspace via `LOCAL_MD_PATH`
 
 ## Required environment
 - `WX_AUTH_KEY`
