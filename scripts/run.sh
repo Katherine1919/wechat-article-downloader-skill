@@ -73,13 +73,19 @@ OUTPUT_SUBDIR="${OUTPUT_SUBDIR:-00_Inbox/competitor_analysis}"
 TARGET_ROOT="$VAULT_PATH/$OUTPUT_SUBDIR"
 mkdir -p "$TARGET_ROOT"
 
-python3 "$SCRIPT_DIR/fetch_account_articles.py" \
-  --account "$ACCOUNT" \
-  --output-root "$TARGET_ROOT" \
-  --mode "$MODE" \
-  --base "${WX_EXPORTER_BASE:-http://localhost:3101}" \
-  --auth-key "$WX_AUTH_KEY" \
-  ${TOPIC_REGEX:+--topic-regex} ${TOPIC_REGEX:+$TOPIC_REGEX}
+fetch_args=(
+  --account "$ACCOUNT"
+  --output-root "$TARGET_ROOT"
+  --mode "$MODE"
+  --base "${WX_EXPORTER_BASE:-http://localhost:3101}"
+  --auth-key "$WX_AUTH_KEY"
+)
+
+if [[ -n "${TOPIC_REGEX:-}" ]]; then
+  fetch_args+=(--topic-regex "$TOPIC_REGEX")
+fi
+
+python3 "$SCRIPT_DIR/fetch_account_articles.py" "${fetch_args[@]}"
 
 ACCOUNT_DIR="$(python3 - <<PY
 import json,re
