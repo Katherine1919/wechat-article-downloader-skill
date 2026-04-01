@@ -4,6 +4,58 @@
 
 OpenClaw 可复用 Skill：按公众号名称批量下载文章（含图片）到 Obsidian，并自动生成标题分类报告。
 
+详细配置（中文）：`docs/CONFIGURATION_ZH.md`
+
+## 给龙虾一句话（最简单）
+
+如果你不想自己操作终端，直接把下面这句话发给 `@KK大总管`：
+
+```text
+安装并启用这个 skill： https://github.com/Katherine1919/wechat-article-downloader-skill 。配置 VAULT_PATH=/Users/KKClaw/openclaw-vault、WX_EXPORTER_BASE=http://localhost:3101；向我索取并写入 WX_AUTH_KEY；然后用账号“KK智能体实战笔记”先跑 MAX_DOWNLOAD=5 的烟雾测试并回报输出路径，最后再跑全量下载。
+```
+
+安装完成后，再发这句即可执行：
+
+```text
+用 wechat-article-downloader 下载“KK智能体实战笔记”全部文章，保存到 Obsidian，并把 markdown 同步到主笔 workspace。
+```
+
+如果出现审批提示，发送：`/approve <id> allow-once`。
+
+---
+
+## 文科生 3 步（手动版）
+
+1) 打开终端并进入目录：
+
+```bash
+cd "/Users/KKClaw/Downloads/wechat-article-downloader-skill"
+```
+
+2) 初始化配置并填写两个值：
+
+```bash
+cp .env.example .env
+open -e .env
+```
+
+在 `.env` 里至少填：
+
+```env
+WX_AUTH_KEY=你的auth-key
+VAULT_PATH=/Users/KKClaw/openclaw-vault
+```
+
+3) 执行下载：
+
+```bash
+./scripts/run.sh --account "KK智能体实战笔记" --mode all
+```
+
+下载目录：
+
+`/Users/KKClaw/openclaw-vault/00_Inbox/competitor_analysis/KK智能体实战笔记/`
+
 ## 功能特性
 - 按关键词搜索公众号
 - 拉取账号全部文章链接
@@ -25,6 +77,9 @@ cp .env.example .env
 至少填写：
 - `WX_AUTH_KEY`
 - `VAULT_PATH`
+
+> `LOCAL_MD_PATH` 为空时：只下载到 Obsidian。
+> `LOCAL_MD_PATH` 有值时：会额外导出 markdown 到本地/workspace。
 
 可选：
 - `WX_EXPORTER_BASE`（默认 `http://localhost:3101`）
