@@ -57,3 +57,59 @@ Note:
 
 ## Readiness
 Current package is ready for GitHub publication and production pilot runs.
+
+---
+
+## Additional Production Validation (local/workspace export)
+
+Date: 2026-04-02
+
+### Scope
+- Verify markdown can be exported to local filesystem path
+- Verify markdown can be exported to Lobster workspace path
+- Verify artifacts are generated for both paths
+
+### Commands executed
+
+1) Build smoke input (2 URLs) from existing account list
+
+2) Download smoke data:
+
+```bash
+python3 scripts/download_articles.py \
+  --urls "/Users/KKClaw/openclaw-vault/00_Inbox/prod_validation/KK智能体实战笔记/urls_smoke_2.txt" \
+  --output "/Users/KKClaw/openclaw-vault/00_Inbox/prod_release_test/KK智能体实战笔记/raw_exports_all" \
+  --retries 1
+```
+
+Result: `{"total": 2, "success": 2, "failed": 0}`
+
+3) Export markdown to local path:
+
+```bash
+python3 scripts/export_markdown.py \
+  --source "/Users/KKClaw/openclaw-vault/00_Inbox/prod_release_test/KK智能体实战笔记/raw_exports_all" \
+  --target "/Users/KKClaw/Downloads/wx_md_local_test" \
+  --account "KK智能体实战笔记" \
+  --mode all
+```
+
+4) Export markdown to Lobster workspace path:
+
+```bash
+python3 scripts/export_markdown.py \
+  --source "/Users/KKClaw/openclaw-vault/00_Inbox/prod_release_test/KK智能体实战笔记/raw_exports_all" \
+  --target "/Users/KKClaw/.openclaw/agents/KK公众号主笔/workspace/inbox_md_prod" \
+  --account "KK智能体实战笔记" \
+  --mode all
+```
+
+### Artifact verification
+- Obsidian smoke output: `raw_exports_all/download-summary.json` exists
+- Local export: `.../wx_md_local_test/KK智能体实战笔记/all/export-summary.json` exists
+- Workspace export: `.../workspace/inbox_md_prod/KK智能体实战笔记/all/export-summary.json` exists
+- Classification output exists in smoke folder
+
+### Notes
+- During one end-to-end run with old auth key, exporter returned `认证信息无效 (ret=-1)` as expected.
+- Error handling now reports this clearly.
